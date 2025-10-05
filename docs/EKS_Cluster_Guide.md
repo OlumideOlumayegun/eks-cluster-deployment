@@ -3,7 +3,7 @@
 ## Introduction
 
 Amazon Elastic Kubernetes Service (EKS) is a fully managed Kubernetes service from AWS.
-In this project, you will:
+In this project, I will:
 
 * Use the AWS Command Line Interface (CLI) and AWS Console.
 * Work with utilities like **eksctl** and **kubectl**.
@@ -22,7 +22,7 @@ eksctl create cluster --name dev --region us-east-1 \
 
 ## Step 1: Log In
 
-Log in to your AWS account and confirm you’re working in the **N. Virginia (us-east-1)** region.
+Log in to AWS account and confirm you’re working in the **N. Virginia (us-east-1)** region.
 
 ---
 
@@ -204,14 +204,12 @@ eksctl delete cluster dev --region us-east-1
 
 ## Conclusion
 
-You successfully:
+I successfully:
 
 * Created an IAM user and EC2 instance.
 * Installed and configured AWS CLI, kubectl, and eksctl.
 * Provisioned an EKS cluster.
 * Deployed an nginx app and verified high availability.
 * Cleaned up resources.
-
-🎉 Congratulations on completing the project!
 
 ---
