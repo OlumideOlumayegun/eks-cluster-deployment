@@ -107,8 +107,6 @@ Created by **Olumide Olumayegun** – Cloud, DevOps & AI Engineer with expertise
 
 ## 🙏 Acknowledgments
 
-    AWS EKS Documentation
-
-    Kubernetes Community
-
-    A Cloud Guru for the original project content
+- AWS EKS Documentation
+- Kubernetes Community
+- A Cloud Guru for the original project content
