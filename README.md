@@ -26,7 +26,7 @@ The project provides a comprehensive guide and automated scripts for deploying a
 
 ## 📂 Repository Structure
 ```
-eks-cluster-lab/
+eks-cluster-deployment/
 ├── README.md
 ├── docs/EKS_Cluster_Guide.docx
 ├── manifests/
