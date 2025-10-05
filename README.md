@@ -41,30 +41,44 @@ eks-cluster-lab/
 
 ## ⚙️ Setup Instructions
 
-### 1. Install CLI Tools
+### 1. IAM Setup
+
+### 2. Launch EC2 Instance and Confugre AWS CLI Tool
+
+```bash
+aws --version
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+which aws
+sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/bin/aws-cli --update
+aws --version
+aws configure
+```
+
+### 3. Install kubectl and eksctl Tools
 ```bash
 chmod +x scripts/install_tools.sh
 ./scripts/install_tools.sh
 ```
 
-### 2. Create an EKS Cluster
+### 4. Create an EKS Cluster
 ```bash
 eksctl create cluster --name dev --region us-east-1 --nodegroup-name standard-workers --node-type t3.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
 ```
 
-### 3. Deploy nginx
+### 5. Deploy nginx
 ```bash
 kubectl apply -f manifests/nginx-svc.yaml
 kubectl apply -f manifests/nginx-deployment.yaml
 ```
 
-### 4. Test Application
+### 6. Test Application
 ```bash
 kubectl get service
 curl "<LOAD_BALANCER_DNS>"
 ```
 
-### 5. Clean Up
+### 7. Clean Up
 ```bash
 chmod +x scripts/cleanup.sh
 ./scripts/cleanup.sh
@@ -90,3 +104,11 @@ Detailed instructions are available in [`docs/EKS_Cluster_Guide.docx`](./docs/EK
 
 ## 👤 Author
 Created by **Olumide Olumayegun** – Cloud, DevOps & AI Engineer with expertise in AWS, Kubernetes, and DevOps.
+
+## 🙏 Acknowledgments
+
+    AWS EKS Documentation
+
+    Kubernetes Community
+
+    A Cloud Guru for the original project content
