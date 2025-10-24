@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo ""🔧 Provisioning tools for the cluster setup..."
+echo "🔧 Provisioning tools for the cluster setup..."
 
 yum --help &>> /dev/null
 if [ $? -eq 0 ]
