@@ -42,7 +42,7 @@ Log in to AWS account and confirm you’re working in the **N. Virginia (us-east
 
 ---
 
-## Step 3: Launch an EC2 Instance and Configure Tools
+## Step 3: Launch an EC2 Instance
 
 1. Go to **EC2 > Instances** → **Launch Instance**.
 2. Select **Amazon Linux 2 AMI**.
@@ -51,6 +51,19 @@ Log in to AWS account and confirm you’re working in the **N. Virginia (us-east
 5. In **Network settings** → enable **Auto-assign Public IP**.
 6. Launch instance.
 7. Once running, select the instance → **Connect** → **EC2 Instance Connect** → **Connect**.
+
+---
+
+## Step 4: Install Git and clone repo
+
+```bash
+sudo yum install -y git
+git clone https://github.com/OlumideOlumayegun/eks-cluster-deployment
+
+```
+---
+
+## Step 5: Update AWS CLI and Install kubectl and eksctl
 
 ### Update AWS CLI
 
@@ -63,7 +76,33 @@ sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/bin/aws-cli --update
 aws --version
 ```
 
-### Configure AWS CLI
+### Install kubectl
+
+```bash
+curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.16.8/2020-04-16/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin
+kubectl version --short --client
+```
+
+### Install eksctl
+
+```bash
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+eksctl help
+```
+
+#### Alternatively, update AWS cli, and install eksctl and kubectl by running the **install_tool.sh** script in the terminal.
+
+```bash
+./eks-cluster-deployment/scripts/install_tool.sh
+```
+
+---
+
+## Step 6: Configure AWS CLI
 
 ```bash
 aws configure
@@ -76,35 +115,19 @@ aws configure
 
 ---
 
-## Step 4: Install kubectl and eksctl
-
-### Install kubectl
-
-```bash
-curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.16.8/2020-04-16/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-kubectl version --short --client
-```
-
-### Install eksctl
-
-```bash
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-sudo mv /tmp/eksctl /usr/bin
-eksctl version
-eksctl help
-```
-
----
-
-## Step 5: Provision an EKS Cluster
+## Step 7: Provision an EKS Cluster
 
 ```bash
 eksctl create cluster --name dev --region us-east-1 \
---nodegroup-name standard-workers --node-type t3.medium \
---nodes 3 --nodes-min 1 --nodes-max 4 --managed
+--nodegroup-name standard-workers --node-type t3.micro \
+--nodes 2 --nodes-min 1 --nodes-max 4 --managed
 ```
+#### Alternatively, provision and EKS cluster by running the **cluster_setup.sh** script in the terminal.
+
+```bash
+./eks-cluster-deployment/scripts/cluster_setup.sh
+```
+
 
 ⏳ This takes 10–15 minutes. If capacity errors occur, retry with `--zones` as shown earlier.
 
@@ -117,9 +140,9 @@ Once complete, check in **EKS > Clusters**.
 
 ---
 
-## Step 6: Verify Cluster
+## Step 8: Verify Cluster
 
-Re-connect to the EC2 t2.micro instance and run:
+Re-connect to the EC2 instance and run:
 
 ```bash
 eksctl get cluster
@@ -128,19 +151,12 @@ aws eks update-kubeconfig --name dev --region us-east-1
 
 ---
 
-## Step 7: Deploy Nginx Application
-
-### Install Git and clone repo
-
-```bash
-sudo yum install -y git
-git clone https://github.com/OlumideOlumayegun/eks-cluster-deployment
-cd eks-cluster-deployment
-```
+## Step 9: Deploy Nginx Application
 
 ### Inspect manifests
 
 ```bash
+cd eks-cluster-deployment
 cat manifests/nginx-deployment.yaml
 cat manifests/nginx-svc.yaml
 ```
@@ -171,7 +187,7 @@ Open the same DNS in a browser to confirm.
 
 ---
 
-## Step 8: Test High Availability
+## Step 10: Test High Availability
 
 1. In EC2, stop worker node instances.
 2. Wait a few minutes while EKS launches replacements.
@@ -198,6 +214,11 @@ curl "<LOAD_BALANCER_DNS_HOSTNAME>"
 
 ```bash
 eksctl delete cluster dev --region us-east-1
+```
+
+or run script:
+```bash
+./scripts/cleanup.sh
 ```
 
 ---

@@ -34,6 +34,7 @@ eks-cluster-deployment/
 │   └── nginx-svc.yaml
 ├── scripts/
 │   ├── install_tools.sh
+│   ├── cluster_setup.sh
 │   └── cleanup.sh
 ```
 
@@ -43,7 +44,9 @@ eks-cluster-deployment/
 
 ### 1. IAM Setup
 
-### 2. Launch EC2 Instance and Confugre AWS CLI Tool
+### 2. Launch EC2 Instance
+
+### 3. Confugre AWS CLI Tool
 
 ```bash
 aws --version
@@ -55,15 +58,27 @@ aws --version
 aws configure
 ```
 
-### 3. Install kubectl and eksctl Tools
+### 4. Install kubectl and eksctl Tools
+
+Install kubectl
 ```bash
-chmod +x scripts/install_tools.sh
-./scripts/install_tools.sh
+curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.16.8/2020-04-16/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/
+kubectl version --short --client
 ```
 
-### 4. Create an EKS Cluster
+Install eksctl
 ```bash
-eksctl create cluster --name dev --region us-east-1 --nodegroup-name standard-workers --node-type t3.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
+echo "🔧 Installing eksctl..."
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+```
+
+### 5. Create an EKS Cluster
+```bash
+eksctl create cluster --name dev --region us-east-1 --nodegroup-name standard-workers --node-type t3.micro --nodes 3 --nodes-min 1 --nodes-max 4 --managed
 ```
 
 ### 5. Deploy nginx
